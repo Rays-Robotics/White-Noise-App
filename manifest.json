@@ -1,0 +1,20 @@
+{
+  "name": "PureNoise",
+  "short_name": "PureNoise",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#f7f9fc",
+  "theme_color": "#f7f9fc",
+  "icons": [
+    {
+      "src": "https://github.com/Rays-Robotics/White-Noise-App/blob/main/Images/logo-low.png?raw=true",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://github.com/Rays-Robotics/White-Noise-App/blob/main/Images/logo-high.png?raw=true",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
