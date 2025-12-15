@@ -1,118 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="PureNoise">
-    <meta name="theme-color" content="#f7f9fc">
-    
-    <title>PureNoise</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="https://github.com/Rays-Robotics/White-Noise-App/blob/main/Images/logo-high.png?raw=true">
-
-    <style>
-        /* --- New Styles for Black Screen Functionality --- */
-        
-        /* 1. The Overlay Element */
-        #black-screen-overlay {
-            position: fixed; /* Covers the entire viewport */
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: black;
-            z-index: 99999; /* Ensure it covers everything else */
-            display: none; /* Start hidden */
-            cursor: pointer; /* Hint that clicking will exit */
-            text-align: center;
-            color: white;
-            font-size: 1.5em;
-            /* Center the text */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* 2. Style for the button (if needed, otherwise rely on styles.css) */
-        .controls-area button {
-            margin-top: 10px;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="PureNoise">
+    <meta name="theme-color" content="#f7f9fc">
+    
+    <title>PureNoise</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="https://github.com/Rays-Robotics/White-Noise-App/blob/main/Images/logo-high.png?raw=true">
 </head>
 <body>
 
-    <div id="black-screen-overlay" onclick="toggleBlackScreen()">
-        <p>TAP TO EXIT BLACK SCREEN</p>
-    </div>
+    <div class="app-container">
+        <header>
+            <h1>PureNoise</h1>
+            <p id="status-display">Ready</p>
+        </header>
 
-    <div class="app-container">
-        <header>
-            <h1>PureNoise</h1>
-            <p id="status-display">Ready</p>
-        </header>
+        <main>
+            <div class="play-button-container">
+                <button id="play-btn" class="play-btn" aria-label="Toggle Playback">
+                    <div class="icon-play"></div>
+                    <div class="icon-stop"></div>
+                </button>
+                <div class="pulse-ring"></div>
+            </div>
+        </main>
 
-        <main>
-            <div class="play-button-container">
-                <button id="play-btn" class="play-btn" aria-label="Toggle Playback">
-                    <div class="icon-play"></div>
-                    <div class="icon-stop"></div>
-                </button>
-                <div class="pulse-ring"></div>
-            </div>
-        </main>
+        <section class="controls-area">
+            
+            <div class="control-group">
+                <label for="pitch-slider">Tone (Frequency)</label>
+                <input type="range" id="pitch-slider" min="100" max="2000" value="600" step="10">
+            </div>
 
-        <section class="controls-area">
-            
-            <div class="control-group">
-                <label for="pitch-slider">Tone (Frequency)</label>
-                <input type="range" id="pitch-slider" min="100" max="2000" value="600" step="10">
-            </div>
+            <div class="control-group">
+                <label for="volume-slider">Volume</label>
+                <input type="range" id="volume-slider" min="0" max="1" value="0.5" step="0.01">
+            </div>
 
-            <div class="control-group">
-                <label for="volume-slider">Volume</label>
-                <input type="range" id="volume-slider" min="0" max="1" value="0.5" step="0.01">
-            </div>
+            <div class="timer-section">
+                <div class="timer-inputs">
+                    <select id="timer-select">
+                        <option value="15">15 Minutes</option>
+                        <option value="30">30 Minutes</option>
+                        <option value="60">1 Hour</option>
+                        <option value="custom">Custom</option>
+                    </select>
+                    <button id="timer-btn" class="secondary-btn">Start Timer</button>
+                </div>
+                <div id="timer-display" class="timer-display hidden"></div>
+            </div>
+        </section>
+    </div>
 
-            <div class="timer-section">
-                <div class="timer-inputs">
-                    <select id="timer-select">
-                        <option value="15">15 Minutes</option>
-                        <option value="30">30 Minutes</option>
-                        <option value="60">1 Hour</option>
-                        <option value="custom">Custom</option>
-                    </select>
-                    <button id="timer-btn" class="secondary-btn">Start Timer</button>
-                </div>
-                <div id="timer-display" class="timer-display hidden"></div>
-            </div>
-
-            <button id="black-screen-btn" class="secondary-btn" onclick="toggleBlackScreen()">Black Screen Mode</button>
-
-        </section>
-    </div>
-
-    <script src="script.js"></script>
-    <script>
-        /**
-         * New JavaScript Function to Toggle the Black Screen
-         * * NOTE: If your script.js already contains an initialization function 
-         * or runs code that might conflict, you may want to move this 
-         * function into script.js instead of keeping it here.
-         */
-        function toggleBlackScreen() {
-            const overlay = document.getElementById('black-screen-overlay');
-            
-            // Toggle the visibility: if it's currently hidden, show it; otherwise, hide it.
-            if (overlay.style.display === 'none' || overlay.style.display === '') {
-                overlay.style.display = 'flex'; // Use flex to center the text
-            } else {
-                overlay.style.display = 'none';
-            }
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
